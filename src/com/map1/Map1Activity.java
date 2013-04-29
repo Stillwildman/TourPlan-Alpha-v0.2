@@ -76,6 +76,7 @@ public class Map1Activity extends MapActivity
         final String Name = userName.getString("name").toString();
         UserName.setText(Name);								//Output the contents of Bundle
     	
+        /*
     	String xmlURL = "http://140.128.198.44:408/plandata/"+Name;
     	String xmlString = getStringByUrl(xmlURL);
       
@@ -225,73 +226,7 @@ public class Map1Activity extends MapActivity
     		return strTarget;  
     	}
     }
-    
-    
-    
-    
-    
-    
-    
-    
- //Create HTTP Connection!!
-    /*
-    private String sendGetDataToInternet(String strTxt)
-    {
-    	String uriXML = "http://labm406.serveftp.com/mobileApp/xml/plan_spot.php?uid="+strTxt;
-    	HttpGet httpRequest = new HttpGet(uriXML);
-    	
-    //	List<NameValuePair> params = new ArrayList<NameValuePair>();
-    //	params.add(new BasicNameValuePair("uid",strTxt));
-    	
-    	try
-    	{
-    		HttpResponse httpResponse = new DefaultHttpClient().execute(httpRequest);
-    		if (httpResponse.getStatusLine().getStatusCode() == 200)
-    		{
-    			String strResult = EntityUtils.toString(httpResponse.getEntity());
-    			strResult = eregi_replace("(.*)<\\?xml","<?xml",strResult);
-    			return strResult;
-    		}
-    	}
-    	
-    	catch (ClientProtocolException e)
-    	{
-    		Toast.makeText(this,e.getMessage().toString(),Toast.LENGTH_SHORT).show();
-    		e.printStackTrace();
-    	}
-    	
-    	catch (IOException e)
-    	{
-    		Toast.makeText(this,e.getMessage().toString(),Toast.LENGTH_SHORT).show();
-    		e.printStackTrace();
-    	}
-    	
-    	catch (Exception e)
-    	{
-    		Toast.makeText(this,e.getMessage().toString(),Toast.LENGTH_SHORT).show();
-    		e.printStackTrace();
-    	}
-    	
-    	return null;
-    }
-    
-    public String eregi_replace(String strFrom, String strTo, String strTarget)  
-    {  
-    	String strPattern = "(?i)"+strFrom;  
-    	Pattern p = Pattern.compile(strPattern);  
-    	Matcher m = p.matcher(strTarget);  
-    	if(m.find())  
-    	{  
-    		return strTarget.replaceAll(strFrom, strTo);  
-    	}
-    	else  
-    	{
-    		return strTarget;  
-    	}
-    }
-    */
-    
-    
+      
  
     @Override
     protected boolean isRouteDisplayed() {

@@ -1,12 +1,10 @@
 package com.map1;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -18,11 +16,15 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
 public class Login extends Activity {
+
+	protected static final int REFRESH_DATA = 0x00000001;
 	
 	 /** Called when the activity is first created. */ 
     @Override
@@ -33,46 +35,89 @@ public class Login extends Activity {
     }
     
     
-    public void btn1Click(View SignInClick) {
+    public void btn1Click(View SignInClick) {  	
     	EditText email_input = (EditText) findViewById(R.id.EmailInput);
     	EditText pass_input = (EditText) findViewById(R.id.PassInput);
     	 		
-    			String[] msg = new String[2];
+    			final String[] msg = new String[2];
     			
     			if (email_input != null && pass_input != null)
     			{
 	    			msg[0] = email_input.getEditableText().toString();
 	    			msg[1] = pass_input.getEditableText().toString();
-
-	    			String echoResult = sendPostDataToInternet(msg);
 	    			
-	    			if (echoResult.contains("Dude! Who the hell are you?!"))
-	    			{
-	    				Toast.makeText(this,echoResult,Toast.LENGTH_LONG).show();
-			    	    		
-	    			} else {
-	    				Toast.makeText(this,"You have logged!",Toast.LENGTH_LONG).show();
-	    				pass_input.setText("");
+	    			//Create a Thread!!
+	    			Thread th = new Thread(new sendPostRunnable(msg));
+	    			th.start();
 	    			
-    					Intent goMap = new Intent();
-		    	    	goMap.setClass(Login.this,Map1Activity.class);
-		    	    				    	    	
-		    	    	//Set the parameter to send
-		    	    	Bundle userName = new Bundle();
-		    	    	userName.putString("name",echoResult);
-		    	    	goMap.putExtras(userName);				//Put parameter into bundle
-		    	    	
-		    	    	Login.this.startActivity(goMap);
-   					}
+	    			//String echoResult = sendPostDataToInternet(msg);
     			}
 	    	}
+    
+    Handler mHandler = new Handler()
+	{
+		@Override
+		public void handleMessage(Message msg)
+		{
+			switch (msg.what)
+			{
+			//Display the catch data from Internet.
+			case REFRESH_DATA:
+				
+				String echoResult = null;
+				
+				if (msg.obj instanceof String)
+					echoResult = (String) msg.obj;
+				
+				if (echoResult.contains("Dude! Who the hell are you?!"))
+    			{
+    				Toast.makeText(Login.this,echoResult,Toast.LENGTH_LONG).show();
+		    	    		
+    			} else {
+    				EditText pass_input = (EditText) findViewById(R.id.PassInput);
+    				Toast.makeText(Login.this,"You have logged!",Toast.LENGTH_LONG).show();
+    				pass_input.setText("");
+    			
+					Intent goMap = new Intent();
+	    	    	goMap.setClass(Login.this,Map1Activity.class);
+	    	    				    	    	
+	    	    	//Set the parameter to send
+	    	    	Bundle userName = new Bundle();
+	    	    	userName.putString("name",echoResult);
+	    	    	goMap.putExtras(userName);				//Put parameter into bundle
+	    	    	
+	    	    	Login.this.startActivity(goMap);
+					}
+				break;
+			}
+		}
+	};
+    
+    
     
     public void textClick(View goWebClick) {
     		Uri uri = Uri.parse(getString(R.string.Labm406));
     		Intent intent = new Intent(Intent.ACTION_VIEW,uri);
     		startActivity(intent);
     }
-    			
+
+    
+    class sendPostRunnable implements Runnable 
+    {
+    	String[] strArr = null;
+    	
+    	public sendPostRunnable(String[] strArr)
+    	{
+    		this.strArr = strArr;
+    	}
+    	
+    	@Override
+    	public void run()
+    	{
+    		String result = sendPostDataToInternet(strArr);
+    		mHandler.obtainMessage(REFRESH_DATA, result).sendToTarget();
+    	}
+    }
     
     
     //Create HTTP Connection!!
@@ -98,23 +143,10 @@ public class Login extends Activity {
     		}
     	}
     	
-    	catch (ClientProtocolException e)
-    	{
-    		Toast.makeText(this,e.getMessage().toString(),Toast.LENGTH_SHORT).show();
-    		e.printStackTrace();
-    	}
-    	
-    	catch (IOException e)
-    	{
-    		Toast.makeText(this,e.getMessage().toString(),Toast.LENGTH_SHORT).show();
-    		e.printStackTrace();
-    	}
-    	
     	catch (Exception e)
-    	{
-    		Toast.makeText(this,e.getMessage().toString(),Toast.LENGTH_SHORT).show();
-    		e.printStackTrace();
-    	}
+        {
+            e.printStackTrace();
+        }
     	
     	return null;
     }
