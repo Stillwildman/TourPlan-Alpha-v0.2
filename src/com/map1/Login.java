@@ -45,10 +45,20 @@ public class Login extends Activity {
     			{
 	    			msg[0] = email_input.getEditableText().toString();
 	    			msg[1] = pass_input.getEditableText().toString();
+	    				
+	    			new Thread()
+					{
+	    				public void run()
+	    				{
+	    					String result = sendPostDataToInternet(msg);
+	    					mHandler.obtainMessage(REFRESH_DATA, result).sendToTarget();
+	    				}
+					}.start();
 	    			
+
 	    			//Create a Thread!!
-	    			Thread th = new Thread(new sendPostRunnable(msg));
-	    			th.start();
+	    			//Thread th = new Thread(new sendPostRunnable(msg));
+	    			//th.start();
 	    			
 	    			//String echoResult = sendPostDataToInternet(msg);
     			}
@@ -101,7 +111,7 @@ public class Login extends Activity {
     		startActivity(intent);
     }
 
-    
+    /*
     class sendPostRunnable implements Runnable 
     {
     	String[] strArr = null;
@@ -118,7 +128,7 @@ public class Login extends Activity {
     		mHandler.obtainMessage(REFRESH_DATA, result).sendToTarget();
     	}
     }
-    
+    */
     
     //Create HTTP Connection!!
     

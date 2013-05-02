@@ -15,7 +15,6 @@
         android:textColor="@drawable/Brown"
         android:textSize="32dp" />
 
-
     <LinearLayout
         android:id="@+id/InputLayout"
         android:layout_width="match_parent"
@@ -58,7 +57,6 @@
         </EditText>
 
     </LinearLayout>
-
 
     <LinearLayout
         android:id="@+id/BtnLayout"

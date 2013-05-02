@@ -13,8 +13,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingBottom="2dp"
-        android:paddingTop="2dp" >
+        android:paddingBottom="5dp">
 
         <TextView
             android:id="@+id/HelloLabel"
@@ -31,6 +30,11 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@drawable/Brown" />
     </LinearLayout>
+    
+    <View
+   		android:layout_width="fill_parent"
+    	android:layout_height="2dp"
+    	android:background="#000000" />
 
     <LinearLayout
         android:id="@+id/MapArea"
@@ -39,7 +43,7 @@
         android:isScrollContainer="true"
         android:overScrollMode="always"
         android:scrollbarAlwaysDrawVerticalTrack="true"
-        android:scrollbars="horizontal|vertical" android:paddingTop="5dp">
+        android:scrollbars="horizontal|vertical">
 
         <com.google.android.maps.MapView
             android:id="@+id/MapView"
@@ -55,6 +59,11 @@
             android:scrollbars="horizontal|vertical" >
         </com.google.android.maps.MapView>
     </LinearLayout>
+    
+    <View
+    	android:layout_width="fill_parent"
+    	android:layout_height="2dp"
+    	android:background="#000000" />
 
     <ScrollView
         android:id="@+id/ScrollArea"
